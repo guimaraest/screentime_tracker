@@ -1,5 +1,7 @@
 # Screen Time Tracker
 
+MADE WITH AI
+
 A lightweight screen time tracker for Windows that records active application usage into a local SQLite database.  
 It runs as a background process, writes periodic heartbeats, and exposes a small CLI for exporting session data.
 
