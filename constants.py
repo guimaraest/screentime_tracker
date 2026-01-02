@@ -1,7 +1,24 @@
 from pathlib import Path
 
 # Database
-DB_PATH = Path("screen_time.db")
+# DB / paths
+APP_NAME = "TGScreenTimeTracker"
+DB_FILENAME = "screen_time.db"
+
+# SQLite PRAGMA settings
+SQLITE_JOURNAL_MODE = "WAL"
+SQLITE_BUSY_TIMEOUT_MS = 3000
+
+# Table names and indexes
+TABLE_APP_SESSIONS = "app_sessions"
+COLUMN_ID = "id"
+COLUMN_APP = "app"
+COLUMN_START_TS = "start_ts"
+COLUMN_END_TS = "end_ts"
+
+INDEX_APP_SESSIONS_APP = "idx_app_sessions_app"
+INDEX_APP_SESSIONS_START = "idx_app_sessions_start"
+
 
 POLL_INTERVAL = 5
 
