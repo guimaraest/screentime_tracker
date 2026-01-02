@@ -4,7 +4,7 @@
 source venv/bin/activate
 
 # Run PyInstaller
-pyinstaller pyinstaller --onefile --clean src/main.py
+pyinstaller pyinstaller --onefile --noconsole --clean src/main.py
 
 echo "Build complete! Check the dist/ folder."
 sss

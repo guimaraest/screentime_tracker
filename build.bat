@@ -2,7 +2,7 @@
 
 call venv\Scripts\activate.bat
 
-pyinstaller --onefile --clean src\main.py
+pyinstaller --onefile --noconsole --clean src\main.py
 
 echo Build complete! Check the dist\ folder.
 pause
