@@ -3,10 +3,7 @@ from pathlib import Path
 # Database
 DB_PATH = Path("screen_time.db")
 
-# Heartbeat
-HEARTBEAT_FILE = Path("tracker_heartbeat.txt")
-HEARTBEAT_INTERVAL = 2.0        # seconds
-HEARTBEAT_TIMEOUT = 5.0         # seconds
+POLL_INTERVAL = 5
 
 # Export / CLI
 DEFAULT_EXPORT_LIMIT = 100

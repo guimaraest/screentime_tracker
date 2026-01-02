@@ -3,20 +3,11 @@ import ctypes
 import os
 import psutil
 import signal
-import subprocess
-import sys
 
-from heartbeat import write_heartbeat
+import glfw
+
 import db
 from constants import *
-
-
-def start_window():
-    subprocess.Popen(
-        [sys.executable, "window.py"],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-    )
 
 
 def get_active_app():
@@ -47,13 +38,14 @@ class ScreenTimeTracker:
         self.current_session_id = None
         self.session_start_ts = None
 
+        self.window = None
+
     def stop(self, *_):
         self.running = False
 
     def close_current_session(self):
         if self.current_session_id is not None:
-            end_ts = time.time()
-            db.end_session(self.current_session_id, end_ts)
+            db.end_session(self.current_session_id, time.time())
 
             self.current_app = None
             self.current_session_id = None
@@ -67,24 +59,57 @@ class ScreenTimeTracker:
         self.current_session_id = session_id
         self.session_start_ts = start_ts
 
+    def init_window(self):
+        if not glfw.init():
+            raise RuntimeError("Failed to initialize GLFW")
+
+        self.window = glfw.create_window(
+            WINDOW_WIDTH,
+            WINDOW_HEIGHT,
+            WINDOW_TITLE,
+            None,
+            None,
+        )
+
+        if not self.window:
+            glfw.terminate()
+            raise RuntimeError("Failed to create window")
+
+        glfw.make_context_current(self.window)
+
     def run(self):
         db.init()
-        start_window()
+        self.init_window()
 
-        while self.running:
-            app = get_active_app()
+        try:
+            while self.running and not glfw.window_should_close(self.window):
+                app = get_active_app()
 
-            if app != self.current_app:
-                self.close_current_session()
+                if app != self.current_app:
+                    self.close_current_session()
 
-                if app:
-                    self.start_new_session(app)
+                    if app:
+                        self.start_new_session(app)
 
-            write_heartbeat()
-            time.sleep(HEARTBEAT_INTERVAL)
+                if self.current_app:
+                    glfw.set_window_title(
+                        self.window,
+                        f"{WINDOW_TITLE} – {self.current_app}",
+                    )
+                else:
+                    glfw.set_window_title(
+                        self.window,
+                        f"{WINDOW_TITLE} – idle",
+                    )
 
-        self.close_current_session()
-        db.close()
+                glfw.poll_events()
+                time.sleep(POLL_INTERVAL)
+
+        finally:
+            # Guaranteed cleanup
+            self.close_current_session()
+            db.close()
+            glfw.terminate()
 
 
 def main():
