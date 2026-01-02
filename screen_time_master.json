@@ -1,0 +1,19 @@
+[
+    {
+        "timestamp": "2025-01-25 17:13:20",
+        "process_status": "unprocessed",
+        "data": {
+            "pycharm64.exe": 10.00048303604126,
+            "Minecraft.exe": 230.02519845962524
+        }
+    },
+    {
+        "timestamp": "2025-01-25 17:17:42",
+        "process_status": "unprocessed",
+        "data": {
+            "pycharm64.exe": 10.000998735427856,
+            "Minecraft.exe": 220.02334260940552,
+            "Taskmgr.exe": 10.001432657241821
+        }
+    }
+]
