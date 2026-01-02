@@ -1,8 +1,8 @@
 import csv
 import argparse
 
-from .db import get_last_sessions
-from .constants import *
+from src.db import get_last_sessions
+from src.constants import *
 
 
 def export_csv(output_path, limit):

@@ -6,7 +6,7 @@ import shutil
 import sys
 from pathlib import Path
 
-from .constants import *
+from src.constants import *
 
 # ---- Setup persistent DB path ----
 
