@@ -1,2 +1,37 @@
-screen_time.db
-__pycache__
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# SQLite database
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Generated / runtime files
+tracker_heartbeat.txt
+last_sessions.csv
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Logs (if you add any later)
+*.log
+
+# IDEs / editors
+.vscode/
+.idea/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
