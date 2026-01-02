@@ -1,38 +1,43 @@
-# window.py
 import time
 import glfw
+
 from heartbeat import is_running
-
 from constants import *
-
-WIDTH = 300
-HEIGHT = 80
-REFRESH_INTERVAL = 1.0
 
 
 def main():
     if not glfw.init():
         return
 
-    window = glfw.create_window(WIDTH, HEIGHT, "Tracker Status", None, None)
+    window = glfw.create_window(
+        WINDOW_WIDTH,
+        WINDOW_HEIGHT,
+        WINDOW_TITLE,
+        None,
+        None,
+    )
     if not window:
         glfw.terminate()
         return
 
     glfw.make_context_current(window)
 
-    last_check = 0
+    last_check = 0.0
+    running = False
 
     while not glfw.window_should_close(window):
         now = time.time()
-        if now - last_check > REFRESH_INTERVAL:
+
+        if now - last_check >= WINDOW_REFRESH_INTERVAL:
             running = is_running()
             last_check = now
 
-        if running:
-            glfw.set_window_title(window, "Tracker Status – RUNNING")
-        else:
-            glfw.set_window_title(window, "Tracker Status – NOT RUNNING")
+        title = (
+            f"{WINDOW_TITLE} – RUNNING"
+            if running
+            else f"{WINDOW_TITLE} – NOT RUNNING"
+        )
+        glfw.set_window_title(window, title)
 
         glfw.poll_events()
         time.sleep(0.05)

@@ -1,17 +1,13 @@
 import time
-from pathlib import Path
 
 from constants import *
-
-HEARTBEAT_FILE = Path("tracker_heartbeat.txt")
-HEARTBEAT_INTERVAL = 2  # seconds
 
 
 def write_heartbeat():
     HEARTBEAT_FILE.write_text(str(time.time()))
 
 
-def is_running(timeout=5):
+def is_running():
     if not HEARTBEAT_FILE.exists():
         return False
 
@@ -20,4 +16,4 @@ def is_running(timeout=5):
     except ValueError:
         return False
 
-    return (time.time() - last) < timeout
+    return (time.time() - last) < HEARTBEAT_TIMEOUT

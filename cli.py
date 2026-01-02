@@ -1,12 +1,8 @@
 import csv
 import argparse
-from pathlib import Path
 
 from db import get_last_sessions
 from constants import *
-
-DEFAULT_LIMIT = 100
-DEFAULT_OUTPUT = Path("last_sessions.csv")
 
 
 def export_csv(output_path, limit):
@@ -36,14 +32,13 @@ def main():
     parser.add_argument(
         "--limit",
         type=int,
-        default=DEFAULT_LIMIT,
-        help=f"Number of sessions to export (default: {DEFAULT_LIMIT})",
+        default=DEFAULT_EXPORT_LIMIT,
+        help=f"Number of sessions to export (default: {DEFAULT_EXPORT_LIMIT})",
     )
 
     parser.add_argument(
         "--out",
-        type=Path,
-        default=DEFAULT_OUTPUT,
+        default=DEFAULT_EXPORT_FILE,
         help="Output CSV file path",
     )
 

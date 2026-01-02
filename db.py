@@ -1,10 +1,7 @@
 import sqlite3
 import time
-from pathlib import Path
 
 from constants import *
-
-DB_PATH = Path("screen_time.db")
 
 
 def init():
@@ -29,6 +26,9 @@ def init():
         CREATE INDEX IF NOT EXISTS idx_app_sessions_start
         ON app_sessions(start_ts)
     """)
+
+    # Improve concurrent read/write behavior
+    cur.execute("PRAGMA journal_mode=WAL;")
 
     conn.commit()
     conn.close()
@@ -90,6 +90,7 @@ def _repair_open_sessions():
 
 def _get_conn():
     return sqlite3.connect(DB_PATH)
+
 
 def get_last_sessions(limit):
     """
@@ -158,4 +159,3 @@ def get_total_duration_for_date(date_str):
     result = cur.fetchone()[0]
     conn.close()
     return result or 0
-

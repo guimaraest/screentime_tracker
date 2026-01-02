@@ -3,7 +3,6 @@ import ctypes
 import os
 import psutil
 import signal
-from pathlib import Path
 import subprocess
 import sys
 
@@ -11,10 +10,6 @@ from heartbeat import write_heartbeat
 import db
 from constants import *
 
-POLL_INTERVAL = 5
-
-def update_heartbeat():
-    write_heartbeat()
 
 def start_window():
     subprocess.Popen(
@@ -22,6 +17,7 @@ def start_window():
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
     )
+
 
 def get_active_app():
     try:
@@ -44,8 +40,7 @@ def get_active_app():
 
 
 class ScreenTimeTracker:
-    def __init__(self, interval):
-        self.interval = interval
+    def __init__(self):
         self.running = True
 
         self.current_app = None
@@ -74,28 +69,26 @@ class ScreenTimeTracker:
 
     def run(self):
         db.init()
+        start_window()
 
         while self.running:
             app = get_active_app()
 
             if app != self.current_app:
-                # App switched or went idle
                 self.close_current_session()
 
                 if app:
                     self.start_new_session(app)
-            
-            update_heartbeat()
 
-            time.sleep(self.interval)
+            write_heartbeat()
+            time.sleep(HEARTBEAT_INTERVAL)
 
-        # Ensure final session is closed
         self.close_current_session()
         db.close()
 
 
 def main():
-    tracker = ScreenTimeTracker(POLL_INTERVAL)
+    tracker = ScreenTimeTracker()
 
     signal.signal(signal.SIGINT, tracker.stop)
     signal.signal(signal.SIGTERM, tracker.stop)
