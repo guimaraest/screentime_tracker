@@ -2,6 +2,8 @@ import sqlite3
 import time
 from pathlib import Path
 
+from constants import *
+
 DB_PATH = Path("screen_time.db")
 
 

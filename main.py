@@ -3,12 +3,25 @@ import ctypes
 import os
 import psutil
 import signal
+from pathlib import Path
+import subprocess
+import sys
 
+from heartbeat import write_heartbeat
 import db
-
+from constants import *
 
 POLL_INTERVAL = 5
 
+def update_heartbeat():
+    write_heartbeat()
+
+def start_window():
+    subprocess.Popen(
+        [sys.executable, "window.py"],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
 
 def get_active_app():
     try:
@@ -71,6 +84,8 @@ class ScreenTimeTracker:
 
                 if app:
                     self.start_new_session(app)
+            
+            update_heartbeat()
 
             time.sleep(self.interval)
 

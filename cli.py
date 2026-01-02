@@ -1,14 +1,16 @@
 import csv
 import argparse
 from pathlib import Path
-from screen_time import get_last_sessions
 
-EXPORT_LIMIT = 100
-OUTPUT_FILE = Path("last_sessions.csv")
+from db import get_last_sessions
+from constants import *
+
+DEFAULT_LIMIT = 100
+DEFAULT_OUTPUT = Path("last_sessions.csv")
 
 
-def export_csv(output_path):
-    sessions = get_last_sessions(EXPORT_LIMIT)
+def export_csv(output_path, limit):
+    sessions = get_last_sessions(limit)
 
     with open(output_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
@@ -28,18 +30,28 @@ def export_csv(output_path):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Export last 100 app sessions to CSV"
+        description="Export recent app sessions to CSV"
     )
+
+    parser.add_argument(
+        "--limit",
+        type=int,
+        default=DEFAULT_LIMIT,
+        help=f"Number of sessions to export (default: {DEFAULT_LIMIT})",
+    )
+
     parser.add_argument(
         "--out",
-        default=OUTPUT_FILE,
         type=Path,
+        default=DEFAULT_OUTPUT,
         help="Output CSV file path",
     )
 
     args = parser.parse_args()
-    export_csv(args.out)
-    print(f"Exported last {EXPORT_LIMIT} sessions to {args.out}")
+
+    export_csv(args.out, args.limit)
+
+    print(f"Exported last {args.limit} sessions to {args.out}")
 
 
 if __name__ == "__main__":
