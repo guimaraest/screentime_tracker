@@ -8,8 +8,8 @@ from collections import deque
 
 import glfw
 
-import db
-from constants import *
+from . import db
+from .constants import *
 
 
 def get_active_app():
